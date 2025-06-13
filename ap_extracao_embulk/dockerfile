@@ -2,28 +2,39 @@ FROM openjdk:8
 
 WORKDIR /app
 
-# Instalação de Dependências
-RUN apt-get update && apt-get install -y wget unzip gettext && rm -rf /var/lib/apt/lists/*
+# 🛠️ Instala dependências essenciais (wget, unzip, gettext, ruby, build tools)
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    gettext \
+    ruby \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Criação de pasta segura para os JARs fora do volume
+# 🔒 Cria pasta segura pros JARs do Embulk
 RUN mkdir -p /opt/embulk
 
-# Carregamento de dependências embulk.jar e jruby-complete.jar para /opt/embulk
+# ⬇️ Baixa o embulk.jar e o jruby-complete.jar (versões fixas pra evitar surpresas)
 RUN wget https://github.com/embulk/embulk/releases/download/v0.9.25/embulk-0.9.25.jar -O /opt/embulk/embulk.jar && \
     wget https://repo1.maven.org/maven2/org/jruby/jruby-complete/9.1.15.0/jruby-complete-9.1.15.0.jar -O /opt/embulk/jruby-complete.jar && \
     chmod +x /opt/embulk/embulk.jar
 
-# Baixo o yq (utilitário para manipulação de YAML via linha de comando)
+# 🔗 Cria link simbólico pro embulk (chamar de qualquer lugar fica fácil)
+RUN ln -s /opt/embulk/embulk.jar /usr/local/bin/embulk && chmod +x /usr/local/bin/embulk
+
+# 🧰 Instala yq pra manipular YAML na linha de comando
 RUN wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64 -O /usr/bin/yq && \
     chmod +x /usr/bin/yq
 
-# Copio todos os arquivos do projeto para dentro da imagem
+# 📦 Instala plugins do embulk (input SQL Server e output Parquet)
+RUN java -jar /opt/embulk/embulk.jar gem install embulk-input-sqlserver && \
+    java -jar /opt/embulk/embulk.jar gem install embulk-output-parquet
+
+# 📁 Copia tudo do projeto pra dentro do container
 COPY . .
 
-# Deixo os scripts shell prontos para execução (evita erro de permissão)
+# ⚙️ Deixa scripts prontos pra execução (sem erro de permissão)
 RUN chmod +x entrypoint.sh scripts/*.sh
 
-# Defino o entrypoint padrão da aplicação
+# 🚦 Define o entrypoint: tudo começa pelo entrypoint.sh
 ENTRYPOINT ["sh", "./entrypoint.sh"]
-
-
