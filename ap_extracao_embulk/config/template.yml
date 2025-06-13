@@ -1,0 +1,33 @@
+in:
+  type: sqlserver
+  host: ${SQLSERVER_HOST}
+  port: ${SQLSERVER_PORT}
+  user: ${SQLSERVER_USER}
+  password: ${SQLSERVER_PASSWORD}
+  database: ${SQLSERVER_DB}
+  column_options:
+    OrganizationNode:
+      value_type: string
+    SpatialLocation:
+      value_type: string
+    DocumentNode:
+      value_type: string
+    ProductDocumentNode:
+      value_type: string
+    Document:
+      value_type: string
+    ProductDocument:
+      value_type: string
+    ThumbNailPhoto:
+      value_type: string
+    LargePhoto:
+      value_type: string
+  query: "SELECT * FROM {{FULL_TABLE}};"
+
+out:
+  type: parquet
+  path_prefix: data/{{OUTPUT_NAME}}
+  file_name: parquet
+
+exec:
+  min_output_tasks: 1

@@ -1,0 +1,70 @@
+schemas:
+  HumanResources:
+    - Department
+    - Employee
+    - EmployeeDepartmentHistory
+    - EmployeePayHistory
+    - JobCandidate
+    - Shift
+  Person:
+    - Address
+    - AddressType
+    - BusinessEntity
+    - BusinessEntityAddress
+    - BusinessEntityContact
+    - ContactType
+    - CountryRegion
+    - EmailAddress
+    - Password
+    - Person
+    - PersonPhone
+    - PhoneNumberType
+    - StateProvince
+  Production:
+    - BillOfMaterials
+    - Culture
+    - Document
+    - Illustration
+    - Location
+    - Product
+    - ProductCategory
+    - ProductCostHistory
+    - ProductDescription
+    - ProductDocument
+    - ProductInventory
+    - ProductListPriceHistory
+    - ProductModel
+    - ProductModelIllustration
+    - ProductModelProductDescriptionCulture
+    - ProductPhoto
+    - ProductProductPhoto
+    - ProductReview
+    - ProductSubcategory
+    - ScrapReason
+    - TransactionHistory
+    - TransactionHistoryArchive
+    - UnitMeasure
+    - WorkOrder
+    - WorkOrderRouting
+  Purchasing:
+    - ProductVendor
+    - ShipMethod
+    - Vendor
+  Sales:
+    - CountryRegionCurrency
+    - CreditCard
+    - Currency
+    - CurrencyRate
+    - Customer
+    - PersonCreditCard
+    - SalesOrderHeaderSalesReason
+    - SalesPerson
+    - SalesPersonQuotaHistory
+    - SalesReason
+    - SalesTaxRate
+    - SalesTerritory
+    - SalesTerritoryHistory
+    - ShoppingCartItem
+    - SpecialOffer
+    - SpecialOfferProduct
+    - Store
