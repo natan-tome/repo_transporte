@@ -1,0 +1,162 @@
+{
+    "type": "object",
+    "required": [],
+    "properties": {
+        "SalesOrderID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "RevisionNumber": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "OrderDate": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "DueDate": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "Status": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "OnlineOrderFlag": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "SalesOrderNumber": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "CustomerID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "BillToAddressID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "ShipToAddressID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "ShipMethodID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "SubTotal": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "TaxAmt": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "Freight": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "TotalDue": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "rowguid": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "ModifiedDate": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "ShipDate": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "PurchaseOrderNumber": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "AccountNumber": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "SalesPersonID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "TerritoryID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "CreditCardID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "CreditCardApprovalCode": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "CurrencyRateID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "Comment": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    }
+}

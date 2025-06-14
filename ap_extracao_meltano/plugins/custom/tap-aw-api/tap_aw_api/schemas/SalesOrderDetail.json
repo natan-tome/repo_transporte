@@ -1,0 +1,72 @@
+{
+    "type": "object",
+    "required": [],
+    "properties": {
+        "SalesOrderID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "SalesOrderDetailID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "OrderQty": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "ProductID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "SpecialOfferID": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "UnitPrice": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "UnitPriceDiscount": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "LineTotal": {
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "rowguid": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "ModifiedDate": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "CarrierTrackingNumber": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    }
+}
