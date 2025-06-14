@@ -1,0 +1,40 @@
+# version: 1  # ✅ Versão obrigatória
+project_id: YOUR_PROJECT_ID
+send_anonymous_usage_stats: true
+default_environment: dev  # 🚨 ESSENCIAL: Define ambiente padrão
+
+environments:
+  - name: dev
+    config: {}
+
+plugins:
+  extractors:
+    - name: tap-aw-api
+      namespace: tap_aw_api
+      variant: custom
+      pip_url: -e ./plugins/custom/tap-aw-api
+      capabilities:
+        - state
+        - catalog
+        - discover
+        - about
+      settings:
+        - name: username
+        - name: password
+          kind: string
+          sensitive: true
+        - name: api_url
+        - name: start_date
+      config:
+        username: ${API_USERNAME}
+        password: ${API_PASSWORD}
+        api_url: ${API_URL}
+        start_date: ${API_START_DATE}
+        limit: 121317
+
+  loaders:
+    - name: target-jsonl  # ✅ Indentação correta
+      variant: andyh1203
+      pip_url: target-jsonl
+      config:
+        destination_path: /data/jsonl  # ✅ Caminho absoluto
