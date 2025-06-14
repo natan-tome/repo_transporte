@@ -1,24 +1,40 @@
-# 🌐 Configuração da URL do workspace Databricks (ex: https://123456.cloud.databricks.com)
+# 🌐 Variáveis de conexão com o workspace Databricks
 variable "databricks_host" {
   type        = string
-  description = "URL completa do workspace do Databricks"
+  description = "URL completa do workspace (ex: https://dbc-123456.cloud.databricks.com)"
 }
 
-# 🔒 Token de acesso pessoal (gerado em User Settings -> Access Tokens)
 variable "databricks_token" {
   type        = string
-  description = "Token de API com permissões de workspace e catalog"
-  sensitive   = true  # 🚨 Valor sensível (não é exibido nos logs)
+  description = "Token de acesso pessoal gerado no User Settings"
+  sensitive   = true  # 🚨 Valor sensível (não aparece em logs)
 }
 
-# 📚 Nome do catálogo Unity Catalog (onde os recursos serão criados)
+# 🗃️ Configurações do Unity Catalog
 variable "catalog_name" {
   type        = string
-  description = "Catálogo principal para organização dos recursos"
+  description = "Nome do catálogo onde os recursos serão criados"
 }
 
-# 📜 Schema padrão dentro do catálogo (estrutura lógica para tabelas/volumes)
 variable "schema_name" {
   type        = string
-  description = "Schema padrão para armazenamento de dados brutos"
+  description = "Schema padrão para organização dos dados"
 }
+
+# 📦 Variável para caminho completo do volume (usada no Terraform)
+variable "volume_path" {
+  type        = string
+  description = "Caminho completo do volume no DBFS (ex: /Volumes/catalog/schema/raw)"
+}
+
+# 📓 Configurações do Notebook
+variable "notebook_path" {
+  type        = string
+  description = "Caminho completo do notebook no workspace do usuário"
+}
+
+variable "email" {
+  type        = string
+  description = "Email do usuário para construção do path do notebook"
+}
+
