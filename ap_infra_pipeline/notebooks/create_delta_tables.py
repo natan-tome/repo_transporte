@@ -1,9 +1,13 @@
-import os
+# 📌 Cria widgets para entrada de parâmetros (se ainda não existirem)
+dbutils.widgets.text("CATALOG_NAME", "ted_dev", "Catalog Name")       # 🏷️ Nome do catálogo
+dbutils.widgets.text("SCHEMA_NAME", "dev_francisco_santos", "Schema Name")  # 📑 Schema alvo
+dbutils.widgets.text("VOLUME_PATH", "/Volumes/ted_dev/dev_francisco_santos/raw", "Volume Path")  # 📦 Caminho do volume
 
-# Tenta pegar do ambiente, se não encontrar usa valor default
-volume_path = os.getenv("VOLUME_PATH", "/Volumes/ted_dev/default/raw")
-schema_path = os.getenv("SCHEMA_NAME", "dev_default")
-catalog_name =  os.getenv("CATALOG_NAME", "dev_default")
+# 📥 Lê valores dos widgets (podem ser sobrescritos por parâmetros externos)
+catalog_name = dbutils.widgets.get("CATALOG_NAME")    # 🔄 Valor padrão ou runtime
+schema_path = dbutils.widgets.get("SCHEMA_NAME")      # 🗺️ Caminho lógico do schema
+volume_path = dbutils.widgets.get("VOLUME_PATH")      # 🗄️ Localização física dos dados brutos
+
 
 # Tabelas do Meltano (JSONL)
 json_tables = [
