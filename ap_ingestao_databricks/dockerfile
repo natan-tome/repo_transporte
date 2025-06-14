@@ -1,0 +1,21 @@
+# 🐍 Imagem base Python 3.10 slim (leve e eficiente)
+FROM python:3.10-slim
+
+# 📦 Instala dependências do sistema (ferramentas essenciais)
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+
+# 🔄 Instala Databricks CLI moderna (versão estável recomendada)
+RUN curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | bash
+
+# 🛣️ Configura PATH global para acesso fácil ao CLI
+ENV PATH="/root/.databricks/bin:$PATH"
+
+# 📂 Define diretório de trabalho e copia arquivos do projeto
+WORKDIR /app
+COPY . . 
+
+# 🔒 Torna o entrypoint executável
+RUN chmod +x entrypoint.sh
+
+# 🚀 Define script de inicialização padrão
+ENTRYPOINT ["sh", "./entrypoint.sh"]
