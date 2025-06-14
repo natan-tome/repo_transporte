@@ -1,0 +1,6 @@
+databricks_host  = "${DATABRICKS_HOST}"
+databricks_token = "${DATABRICKS_TOKEN}"
+catalog_name     = "${CATALOG_NAME}"
+schema_name      = "${SCHEMA_NAME}"
+notebook_path    = "/Workspace/Users/${EMAIL}/create_delta_tables"
+email            = "${EMAIL}"
