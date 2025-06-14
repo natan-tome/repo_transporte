@@ -1,30 +1,64 @@
 #!/bin/bash
-set -euo pipefail  # 🛡️ Modo seguro: erro, vars não definidas e pipefail
+set -eu  # 🛡️ Para execução segura: erro em variáveis indefinidas e qualquer falha
 
-echo "🚀 [ENTRYPOINT] Iniciando container do pipeline de infra..."
+echo "🚀 [ENTRYPOINT] Iniciando terraform apply..."
 
-# ⚠️ Validação crítica das variáveis essenciais (já injetadas via Docker env_file)
-required_vars=(
-  DATABRICKS_HOST
-  DATABRICKS_TOKEN
-  CATALOG_NAME
-  SCHEMA_NAME
-)
+# ─────────────────────────────────────────────────────────────
+# 🔄 Carrega variáveis do .env se ainda não estiverem no ambiente
+# Suporta montagem externa via Docker: .env → /env/.env
+# ─────────────────────────────────────────────────────────────
+if [ -z "${DATABRICKS_HOST:-}" ]; then
+  if [ -f "/env/.env" ]; then
+    echo "🔧 [ENTRYPOINT] Carregando variáveis de /env/.env..."
+    export $(grep -v '^#' /env/.env | xargs)
+  elif [ -f "./.env" ]; then
+    echo "🔧 [ENTRYPOINT] Carregando variáveis de ./.env..."
+    export $(grep -v '^#' ./.env | xargs)
+  else
+    echo "⚠️ [WARNING] Nenhum arquivo .env encontrado. Variáveis podem estar ausentes."
+  fi
+fi
 
-for var in "${required_vars[@]}"; do
-  if [ -z "${!var:-}" ]; then
-    echo "❌ [ERRO CRÍTICO] Variável $var não definida no ambiente"
+# ─────────────────────────────────────────────
+# 📦 Construção dinâmica do VOLUME_PATH (se necessário)
+# ─────────────────────────────────────────────
+if [ -z "${VOLUME_PATH:-}" ]; then
+  export VOLUME_PATH="/Volumes/${CATALOG_NAME}/${SCHEMA_NAME}/raw"
+  echo "📦 [INFO] VOLUME_PATH construído dinamicamente: $VOLUME_PATH"
+fi
+
+# ─────────────────────────────────────────────────────────────
+# 📓 Valida e constrói dinamicamente o caminho do notebook
+# ─────────────────────────────────────────────────────────────
+if [ -z "${NOTEBOOK_PATH:-}" ]; then
+  if [ -n "${EMAIL:-}" ]; then
+    NOTEBOOK_PATH="/Workspace/Users/${EMAIL}/create_delta_tables"
+    export NOTEBOOK_PATH
+  else
+    echo "❌ [ERRO] Variável EMAIL não definida para gerar o NOTEBOOK_PATH."
     exit 1
   fi
-done
+fi
 
-# 🏗️ Inicialização do Terraform (configuração básica)
-echo "⚙️ Inicializando Terraform..."
-terraform init
+# 🐞 Debug opcional: mostra variáveis carregadas
+echo "📝 [INFO] Variáveis carregadas:"
+echo " - DATABRICKS_HOST = $DATABRICKS_HOST"
+echo " - CATALOG_NAME    = $CATALOG_NAME"
+echo " - SCHEMA_NAME     = $SCHEMA_NAME"
+echo " - VOLUME_PATH     = $VOLUME_PATH"
+echo " - NOTEBOOK_PATH   = $NOTEBOOK_PATH"
+echo " - EMAIL           = $EMAIL"
 
-# 🛠️ Aplicação da infraestrutura com variáveis do ambiente
-echo "🔄 Aplicando configuração de infra..."
-terraform apply -auto-approve
+# ─────────────────────────────────────────────────────────────
+# 🏗️ Executa Terraform (init e apply)
+# ─────────────────────────────────────────────────────────────
+terraform init -input=false
 
-echo "✅ [SUCESSO] Infraestrutura provisionada com sucesso!"
-
+terraform apply -auto-approve \
+  -var="databricks_host=${DATABRICKS_HOST}" \
+  -var="databricks_token=${DATABRICKS_TOKEN}" \
+  -var="catalog_name=${CATALOG_NAME}" \
+  -var="schema_name=${SCHEMA_NAME}" \
+  -var="volume_path=${VOLUME_PATH}" \
+  -var="notebook_path=${NOTEBOOK_PATH}" \
+  -var="email=${EMAIL}"
