@@ -8,7 +8,7 @@ echo "========================================"
 # 🔄 Carrega variáveis do .env (se montado via Docker)
 if [ -f "/env/.env" ]; then
   echo "🔧 [INFO] Carregando variáveis de ambiente do /env/.env..."
-  export $(grep -v '^#' /env/.env | xargs)
+  export $(grep -v '^#' ./.env | xargs)
 fi
 
 # 📦 Construção dinâmica do caminho do volume (caso não definido)
