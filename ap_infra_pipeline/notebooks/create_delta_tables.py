@@ -1,13 +1,12 @@
 # 📌 Cria widgets para entrada de parâmetros (se ainda não existirem)
-dbutils.widgets.text("CATALOG_NAME", "ted_dev", "Catalog Name")       # 🏷️ Nome do catálogo
-dbutils.widgets.text("SCHEMA_NAME", "dev_francisco_santos", "Schema Name")  # 📑 Schema alvo
-dbutils.widgets.text("VOLUME_PATH", "/Volumes/ted_dev/dev_francisco_santos/raw", "Volume Path")  # 📦 Caminho do volume
+dbutils.widgets.text("CATALOG_NAME", "", "Catalog Name")       # 🏷 Nome do catálogo
+dbutils.widgets.text("SCHEMA_NAME", "", "Schema Name")  # 📑 Schema alvo
+dbutils.widgets.text("VOLUME_PATH", "", "Volume Path")  # 📦 Caminho do volume
 
 # 📥 Lê valores dos widgets (podem ser sobrescritos por parâmetros externos)
 catalog_name = dbutils.widgets.get("CATALOG_NAME")    # 🔄 Valor padrão ou runtime
-schema_path = dbutils.widgets.get("SCHEMA_NAME")      # 🗺️ Caminho lógico do schema
-volume_path = dbutils.widgets.get("VOLUME_PATH")      # 🗄️ Localização física dos dados brutos
-
+schema_path = dbutils.widgets.get("SCHEMA_NAME")      # 🗺 Caminho lógico do schema
+volume_path = dbutils.widgets.get("VOLUME_PATH")      # 🗄 Localização física dos dados brutos
 
 # Tabelas do Meltano (JSONL)
 json_tables = [
@@ -85,25 +84,18 @@ parquet_tables = [
     "sales_store"
 ]
 
-
 # JSONL -> Delta
 for table in json_tables:
-    path = f"{volume_path}.db/api_{table}.jsonl"
+    path = f"{volume_path}/api_{table}.jsonl"
     delta = f"{catalog_name}.{schema_path}.api_{table.lower()}"
     print(f"▶ Criando tabela Delta: {delta}")
-    spark.sql(f"""
-        CREATE OR REPLACE TABLE {delta}
-        USING DELTA
-        AS SELECT * FROM json.{path}
-    """)
+    df = spark.read.json(path)
+    df.write.format("delta").mode("overwrite").saveAsTable(delta)
 
 # Parquet -> Delta
 for table in parquet_tables:
     path = f"{volume_path}/db_{table}.parquet"
     delta = f"{catalog_name}.{schema_path}.db_{table}"
     print(f"▶ Criando tabela Delta: {delta}")
-    spark.sql(f"""
-        CREATE OR REPLACE TABLE {delta}
-        USING DELTA
-        AS SELECT * FROM parquet.{path}
-    """)
+    df = spark.read.parquet(path)
+    df.write.format("delta").mode("overwrite").saveAsTable(delta)
