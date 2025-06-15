@@ -1,7 +1,7 @@
 <br>
 <br>
 
-# 🚀 Projeto Checkpoint 02 – Pipeline de Infraestrutura e Ingestão de Dados
+# 🛢️ Adventure Works _ Pipeline de Infraestrutura e Ingestão de Dados _ 2025 🛢️
 
 <br>
 
