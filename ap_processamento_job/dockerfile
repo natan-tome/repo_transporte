@@ -1,0 +1,23 @@
+# 🏗️ Imagem base com Terraform (versão fixa para evitar quebras)
+FROM hashicorp/terraform:1.6
+
+# 📦 Instala dependências do sistema (Python e ferramentas CLI)
+RUN apk add --no-cache python3 py3-pip bash curl jq
+
+# 🔒 Cria ambiente virtual isolado e instala databricks-cli
+RUN python3 -m venv /opt/venv \
+ && /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
+ && /opt/venv/bin/pip install databricks-cli requests
+
+# 🛣️ Configura PATH para incluir o ambiente virtual globalmente
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 📂 Define diretório de trabalho e copia toda a infraestrutura
+WORKDIR /infra
+COPY . .
+
+# 🔒 Torna scripts executáveis
+RUN chmod +x entrypoint.sh scripts/destroy.sh
+
+# 🚀 Define entrypoint padrão (script de inicialização)
+ENTRYPOINT ["sh", "./entrypoint.sh"]
