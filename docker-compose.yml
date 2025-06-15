@@ -1,0 +1,83 @@
+services:
+  # 🏭 Serviço de extração via Embulk (dados do SQL Server para Parquet)
+  extracao_embulk:
+    build:
+      context: ./ap_extracao_embulk  # 📂 Diretório do Dockerfile
+      dockerfile: Dockerfile         # 🐳 Configuração de construção padrão
+    container_name: ap_extracao_embulk  # 🏷️ Nome fixo para fácil referência
+    volumes:
+      - ./ap_extracao_embulk:/app    # 🔄 Sync de código local-container
+      - shared_data:/data            # 📦 Dados compartilhados entre serviços
+    env_file:
+      - ./.env  # 🔒 Variáveis sensíveis (credenciais DB)
+    working_dir: /app  # 📂 Diretório padrão para execução de comandos
+    entrypoint: ["sh", "-c", "while true; do sleep 3600; done"]  # ⏲️ Mantém container vivo para execução manual
+
+  # 🌐 Serviço de extração via Meltano (API REST para JSONL)
+  extracao_meltano:
+    build:
+      context: ./ap_extracao_meltano  # 📦 Projeto Meltano completo
+      dockerfile: Dockerfile          # 🛠️ Build personalizado com dependências
+    container_name: ap_extracao_meltano  # 🏷️ Identificação clara no Docker
+    volumes:
+      - ./ap_extracao_meltano:/app    # 🔄 Desenvolvimento em hot-reload
+      - shared_data:/data             # 🤝 Dados compartilhados com Embulk
+    working_dir: /app  # 📂 Ponto de partida para comandos meltano
+    env_file:
+      - ./.env  # 🔧 Configurações de ambiente (URLs, limites)
+    entrypoint: ["sh", "-c", "while true; do sleep 3600; done"]  # ⏳ Mantém container ativo para execuções sob demanda
+  
+  infra_pipeline:
+    build:
+      context: ./ap_infra_pipeline
+      dockerfile: Dockerfile
+    container_name: ap_infra_pipeline
+    volumes:
+      - ./ap_infra_pipeline:/infra            # Código fonte
+      - ./shared_data:/data    
+      # - ./.env:/app/.env             # Dados compartilhados
+      # - ./.env:/app/.env:ro               # <-- Monta o .env da pasta main na raiz do projeto como /app/.env (readonly)
+      - ./ap_infra_pipeline/notebooks:/notebooks
+    working_dir: /infra
+    network_mode: "host"
+    env_file:
+      - ./.env                           # <-- Garante que as variáveis sejam carregadas do .env montado
+    entrypoint: [ "sh", "-c", "while true; do sleep 3600; done" ]
+
+  ingestao_databricks:
+    build:
+      context: ./ap_ingestao_databricks
+    container_name: ap_ingestao_databricks
+    working_dir: /app
+    env_file:
+      - ./.env
+    volumes:
+      - ./ap_ingestao_databricks:/app
+      - shared_data:/data
+    entrypoint: [ "sh", "-c", "while true; do sleep 3600; done" ]
+
+  processamento_job:
+    build:
+      context: ./ap_processamento_job
+    container_name: ap_processamento_job
+    working_dir: /infra
+    network_mode: "host"
+    env_file:
+      - ./.env
+    volumes:
+      - ./ap_processamento_job:/infra
+      - shared_notebooks:/shared
+      - ./.env:/env/.env:ro
+    entrypoint: [ "sh", "-c", "while true; do sleep 3600; done" ]
+
+
+
+# 📦 Volume persistente para dados intermediários
+volumes:
+  shared_data:  # 🗃️ Armazena Parquet/JSONL entre estágios do pipeline
+  shared_notebooks:
+  
+networks:
+  default:
+    driver: bridge
+
