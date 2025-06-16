@@ -8,9 +8,9 @@ echo "========================================"
 # 🗂️ Carrega variáveis do .env (caso esteja montado)
 if [ -f "/env/.env" ]; then
   echo "🔧 [INFO] Carregando variáveis do arquivo .env..."
-  export $(grep -v '^#' /env/.env | xargs)
+  export $(grep -v '^#' ./.env | xargs)
 else
-  echo "⚠️ [AVISO] Arquivo /env/.env não encontrado. Variáveis podem não estar carregadas."
+  echo "⚠️ [AVISO] Arquivo ./.env não encontrado. Variáveis podem não estar carregadas."
 fi
 
 # 📦 Construção dinâmica do VOLUME_PATH (se necessário)
