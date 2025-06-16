@@ -6,7 +6,7 @@ echo "🚀 [INFO] Iniciando execução do job Delta via Terraform"
 echo "========================================"
 
 # 🗂️ Carrega variáveis do .env (caso esteja montado)
-if [ -f "/env/.env" ]; then
+if [ -f "./.env" ]; then
   echo "🔧 [INFO] Carregando variáveis do arquivo .env..."
   export $(grep -v '^#' ./.env | xargs)
 else
