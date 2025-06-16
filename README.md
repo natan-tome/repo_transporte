@@ -259,10 +259,10 @@ make run_job
 
 <br>
 
-> **Atenção:**  
-> - Nunca compartilhe o arquivo `.env` preenchido publicamente.  
-> - Sempre valide as variáveis antes de executar o pipeline.
-> - Consulte a documentação inline dos scripts e notebooks para detalhes de uso e troubleshooting.
+**Atenção:**  
+- Nunca compartilhe o arquivo `.env` preenchido publicamente.  
+- Sempre valide as variáveis antes de executar o pipeline.
+- Consulte a documentação inline dos scripts e notebooks para detalhes de uso e troubleshooting.
 
 ---
 <br>
@@ -274,4 +274,4 @@ make run_job
 
 
 
-*[1]: extracao_tabelas.yml
+*[1]: [extracao_tabelas.yml](https://github.com/natan-tome/aw_infra_pipeline_2025/blob/main/ap_extracao_embulk/config/extracao_tabelas.yml)
