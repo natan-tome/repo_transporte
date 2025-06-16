@@ -139,9 +139,12 @@ Este projeto entrega um pipeline de dados robusto, modular e escalável, capaz d
 1. **Clone o repositório:**
 
 ```bash
-git clone https://github.com/natan-tome/aw_infra_pipeline_2025.git
+git clone git@github.com:natan-tome/aw_infra_pipeline_2025.git
 cd aw_infra_pipeline_2025
 ```
+
+💡 Se encontrar problemas de permissão, verifique se está logado no GitHub com a conta autorizada. Também é possível clonar via SSH se sua chave pública estiver configurada.
+
 
 2. **Configure o arquivo `.env`:**
 - Preencha todas as variáveis do template `.env` com suas credenciais e informações de ambiente.
